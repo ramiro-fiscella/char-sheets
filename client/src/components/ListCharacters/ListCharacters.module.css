@@ -1,0 +1,40 @@
+.list_container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  margin: 4rem auto;
+  max-width: 1200px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  border-radius: 2px;
+  border: 1px solid #a78b3f;
+  background: linear-gradient(135deg, #202122 0%, #1e2325 100%);
+  width: 280px;
+  color: #a78b3f;
+}
+
+.list h3 {
+  color: #a78b3f;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  line-height: 1.2rem;
+
+  background-color: #a78b3f;
+  color: #252525;
+  padding: 0.5rem;
+}
+
+.list img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
