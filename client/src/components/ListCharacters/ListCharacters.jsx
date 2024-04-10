@@ -21,15 +21,19 @@ function ListCharacters() {
   return (
     <>
       <h2>ListCharacters</h2>
-      <div className={style.list_container}>
+      <div className={style.card_container}>
         {characters.map((character) => (
-          <div key={character.char_id} className={style.list}>
-            <img src={character.image_url} alt={character.name} />
-            <h3>{character.name}</h3>
-            <p>Race: {character.race}</p>
-            <p>Class: {character.char_class}</p>
-            <p>Level: {character.level}</p>
-          </div>
+          <article key={character.char_id} className={style.card}>
+            <header>
+              <h3>{character.name}</h3>
+              <h4>{character.level}</h4>
+            </header>
+            <img src={character.avatar} alt={character.name} />
+            <footer>
+              <h4>{character.race}</h4>
+              <p>Class: {character.char_class}</p>
+            </footer>
+          </article>
         ))}
       </div>
     </>

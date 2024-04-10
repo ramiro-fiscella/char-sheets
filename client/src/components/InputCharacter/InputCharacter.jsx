@@ -20,15 +20,26 @@ const InputCharacter = () => {
   };
 
   const onSubmitNewCharacter = async (e) => {
+    e.preventDefault();
     try {
-      const body = newCharacter;
-      const response = await fetch("http://localhost:5000/characters", {
+      const formData = new FormData();
+      formData.append("name", newCharacter.name);
+      formData.append("race", newCharacter.race);
+      formData.append("char_class", newCharacter.char_class);
+      formData.append("level", newCharacter.level);
+      formData.append("image", newCharacter.image);
+
+      await fetch("http://localhost:5000/characters", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: formData,
       });
 
-      window.location = "/";
+      if (response.ok) {
+        alert("Character created");
+        window.location = "/";
+      } else {
+        alert("Cannot create character");
+      }
     } catch (err) {
       console.error(err.message);
     }
