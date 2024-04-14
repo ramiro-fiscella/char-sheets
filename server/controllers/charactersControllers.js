@@ -1,7 +1,4 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const { query } = require("./db");
+const { query } = require("../db");
 const { v2: cloudinary } = require("cloudinary");
 const multer = require("multer");
 
@@ -22,9 +19,7 @@ const storage = multer.diskStorage({
   // Obterner nombre personaje y tipo de imagen para optimizar nombre de carga
   filename: (req, file, cb) => {
     const characterName = req.body.name; // Obtener el nombre del personaje desde la solicitud (requiere que el campo 'name' esté presente en la solicitud)
-    const timestamp = Date.now();
-    const extension = file.originalname.split(".").pop(); // Obtener la extensión del archivo original
-    const filename = `${characterName}_${timestamp}.${extension}`;
+    const filename = `${characterName}`;
     cb(null, filename);
   },
 });
@@ -49,14 +44,8 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Routes
-
 // create character
-app.post("/characters", upload.single("image"), async (req, res) => {
+const createCharacter = async (req, res) => {
   try {
     const { name, race, char_class, level } = req.body;
 
@@ -81,10 +70,10 @@ app.post("/characters", upload.single("image"), async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-});
+};
 
 // get all characters
-app.get("/characters", async (req, res) => {
+const getCharacters = async (req, res) => {
   try {
     const allCharacters = await query("SELECT * FROM characters");
     res.json(allCharacters.rows);
@@ -92,10 +81,10 @@ app.get("/characters", async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-});
+};
 
 // get a character
-app.get("/characters/:id", async (req, res) => {
+const getCharacterById = async (req, res) => {
   try {
     const { id } = req.params;
     const character = await query(
@@ -107,10 +96,10 @@ app.get("/characters/:id", async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-});
+};
 
 // update character
-app.put("/characters/:id", async (req, res) => {
+const updateCharacter = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, race, char_class, level, avatar } = req.body;
@@ -123,10 +112,10 @@ app.put("/characters/:id", async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-});
+};
 
 // delete character
-app.delete("/characters/:id", async (req, res) => {
+const deleteCharacter = async (req, res) => {
   try {
     const { id } = req.params;
     await query("DELETE FROM characters WHERE char_id = $1", [id]);
@@ -135,10 +124,12 @@ app.delete("/characters/:id", async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-});
+};
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+module.exports = {
+  createCharacter,
+  getCharacters,
+  getCharacterById,
+  updateCharacter,
+  deleteCharacter,
+};
